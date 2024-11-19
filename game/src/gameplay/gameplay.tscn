@@ -1,7 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://4husr2ek7co7"]
+[gd_scene load_steps=3 format=3 uid="uid://4husr2ek7co7"]
 
 [ext_resource type="PackedScene" uid="uid://cgnajcvst8qr7" path="res://src/gameplay/ui/hud.tscn" id="1_a64cp"]
+[ext_resource type="PackedScene" uid="uid://ch3gfoevk7wsu" path="res://src/gameplay/ui/cauldron.tscn" id="2_w8oa4"]
 
 [node name="Gameplay" type="Node2D"]
 
 [node name="Hud" parent="." instance=ExtResource("1_a64cp")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Hud"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Cauldron" parent="Hud/HBoxContainer" instance=ExtResource("2_w8oa4")]
+layout_mode = 2
+
+[node name="Cauldron2" parent="Hud/HBoxContainer" instance=ExtResource("2_w8oa4")]
+layout_mode = 2
+
+[node name="Cauldron3" parent="Hud/HBoxContainer" instance=ExtResource("2_w8oa4")]
+layout_mode = 2
