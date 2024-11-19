@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://4husr2ek7co7"]
+[gd_scene load_steps=6 format=3 uid="uid://4husr2ek7co7"]
 
 [ext_resource type="PackedScene" uid="uid://cgnajcvst8qr7" path="res://src/gameplay/ui/hud.tscn" id="1_a64cp"]
 [ext_resource type="Script" path="res://src/gameplay/gameplay.gd" id="1_e2x2a"]
 [ext_resource type="PackedScene" uid="uid://ch3gfoevk7wsu" path="res://src/gameplay/ui/cauldron.tscn" id="2_w8oa4"]
 [ext_resource type="Texture2D" uid="uid://cf3dlx7olnpnr" path="res://icon.svg" id="3_excy8"]
+[ext_resource type="Texture2D" uid="uid://c6vvyjohdo563" path="res://assets/art/diamond_icon.png" id="5_0h22c"]
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_e2x2a")
@@ -35,3 +36,7 @@ layout_mode = 2
 z_index = -1
 position = Vector2(190, 217)
 texture = ExtResource("3_excy8")
+
+[node name="HeldIngredient" type="Sprite2D" parent="Player"]
+position = Vector2(0, -64)
+texture = ExtResource("5_0h22c")
