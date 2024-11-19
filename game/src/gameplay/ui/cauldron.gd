@@ -18,14 +18,9 @@ var active_ingredients_count = 0
 func _ready() -> void:
     ingredients.map(func(x): x.hide())
 
-func _process(delta: float) -> void:
-    if Input.is_action_just_pressed("ui_accept"):
-        if active_ingredients_count < MAX_INGREDIENTS:
-            var new_ingredient_type = INGREDIENT_TYPES.pick_random()
-            add_ingredient(new_ingredient_type)
-
 func add_ingredient(ingredient_type: String) -> void:
-    var current_ingredient: TextureRect = ingredients[active_ingredients_count] as TextureRect
-    current_ingredient.show()
-    current_ingredient.texture = load(INGREDIENT_ICON_FORMAT % ingredient_type)
-    active_ingredients_count += 1
+    if active_ingredients_count < MAX_INGREDIENTS:
+        var current_ingredient: TextureRect = ingredients[active_ingredients_count] as TextureRect
+        current_ingredient.show()
+        current_ingredient.texture = load(INGREDIENT_ICON_FORMAT % ingredient_type)
+        active_ingredients_count += 1
