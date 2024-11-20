@@ -54,8 +54,8 @@ func full_brew() -> void:
                 else:
                     splash_right.push_back(i)
         
-    potion_produced.emit(potion, splash_left, splash_right)
     empty_cauldron()
+    potion_produced.emit(potion, splash_left, splash_right)
 
 func empty_cauldron() -> void:
     ingredient_types.clear()

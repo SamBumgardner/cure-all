@@ -19,6 +19,9 @@ var current_player_cauldron_i: int:
         player.global_position = cauldron_anchors[current_player_cauldron_i].global_position
 
 func _ready() -> void:
+    for i in cauldrons.size():
+        cauldrons[i].potion_produced.connect(_on_cauldron_potion_produced.bind(i))
+
     await get_tree().process_frame
     cauldron_anchors = get_tree().get_nodes_in_group("brewer_anchors")
     cauldron_anchors.sort_custom(func(a, b): return a.global_position.x < b.global_position.x)
@@ -43,3 +46,28 @@ func _process(_delta: float) -> void:
 func take_next_ingredient():
     held_ingredient_type = queue_helper.cycle_queue()
     hud.update_ingredient_queue(queue_helper.queued_ingredients)
+
+func _on_cauldron_potion_produced(
+    potion: Potion,
+    splash_left: Array[Ingredient.TYPES],
+    splash_right: Array[Ingredient.TYPES],
+    cauldron_index: int
+):
+    print_debug("we made a potion with level %s and types %s!" % [potion.level, potion.types])
+
+    var left_cauldron = _get_wrapped_cauldron(cauldron_index, -1)
+    for ingredient in splash_left:
+        left_cauldron.add_ingredient(ingredient)
+    
+    var right_cauldron = _get_wrapped_cauldron(cauldron_index, 1)
+    for ingredient in splash_right:
+        right_cauldron.add_ingredient(ingredient)
+
+func _get_wrapped_cauldron(starting_cauldron_i: int, offset: int) -> Cauldron:
+    var new_cauldron_i: int = starting_cauldron_i + offset
+    if new_cauldron_i < 0:
+        new_cauldron_i += cauldrons.size()
+    else:
+        new_cauldron_i = new_cauldron_i % cauldrons.size()
+    
+    return cauldrons[new_cauldron_i]
