@@ -28,6 +28,7 @@ func _ready() -> void:
 
     current_player_cauldron_i = cauldron_anchors.size() / 2
     take_next_ingredient()
+    hud.update_potion_queue(queue_helper.queued_potions)
 
 func _process(_delta: float) -> void:
     if Input.is_action_just_pressed("ui_left"):
@@ -44,7 +45,7 @@ func _process(_delta: float) -> void:
         take_next_ingredient()
 
 func take_next_ingredient():
-    held_ingredient_type = queue_helper.cycle_queue()
+    held_ingredient_type = queue_helper.cycle_ingredient_queue()
     hud.update_ingredient_queue(queue_helper.queued_ingredients)
 
 func _on_cauldron_potion_produced(
@@ -54,6 +55,9 @@ func _on_cauldron_potion_produced(
     cauldron_index: int
 ):
     print_debug("we made a potion with level %s and types %s!" % [potion.level, potion.types])
+    var queued_potion = queue_helper.get_front_potion()
+    if queued_potion.types[0] in potion.types:
+        _matched_queue_potion()
 
     var left_cauldron = _get_wrapped_cauldron(cauldron_index, -1)
     for ingredient in splash_left:
@@ -71,3 +75,8 @@ func _get_wrapped_cauldron(starting_cauldron_i: int, offset: int) -> Cauldron:
         new_cauldron_i = new_cauldron_i % cauldrons.size()
     
     return cauldrons[new_cauldron_i]
+
+func _matched_queue_potion():
+    queue_helper.cycle_potion_queue()
+    hud.update_potion_queue(queue_helper.queued_potions)
+    # score points

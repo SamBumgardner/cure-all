@@ -1,5 +1,7 @@
 class_name Potion extends RefCounted
 
+const POTION_ICON_FORMAT: String = "res://assets/art/%s_potion.png"
+
 var level: int
 var types: Array[Ingredient.TYPES]
 
