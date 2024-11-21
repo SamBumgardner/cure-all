@@ -41,7 +41,11 @@ func _process(_delta: float) -> void:
         current_player_cauldron_i = (current_player_cauldron_i + 1) % cauldron_anchors.size()
 
     if Input.is_action_just_pressed("ui_accept"):
-        cauldrons[current_player_cauldron_i].add_ingredient(held_ingredient_type)
+        cauldrons[current_player_cauldron_i].add_ingredient(held_ingredient_type, true)
+        take_next_ingredient()
+
+    if Input.is_action_just_pressed("ui_cancel"):
+        cauldrons[current_player_cauldron_i].add_ingredient(held_ingredient_type, false)
         take_next_ingredient()
 
 func take_next_ingredient():
@@ -61,11 +65,11 @@ func _on_cauldron_potion_produced(
 
     var left_cauldron = _get_wrapped_cauldron(cauldron_index, -1)
     for ingredient in splash_left:
-        left_cauldron.add_ingredient(ingredient)
+        left_cauldron.add_ingredient(ingredient, false)
     
     var right_cauldron = _get_wrapped_cauldron(cauldron_index, 1)
     for ingredient in splash_right:
-        right_cauldron.add_ingredient(ingredient)
+        right_cauldron.add_ingredient(ingredient, true)
 
 func _get_wrapped_cauldron(starting_cauldron_i: int, offset: int) -> Cauldron:
     var new_cauldron_i: int = starting_cauldron_i + offset
