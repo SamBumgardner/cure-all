@@ -43,9 +43,10 @@ func potion_completed(potion: Potion):
     rank_increase(POTION_RANK_POINTS)
 
     # Score points for potion quality
-    var potion_score_value: float = potion.level * POTION_LEVEL_SCORE + POTION_RANK_TIER_SCORE * rank_tier
+    var potion_score_value: float = (potion.level + 1) * POTION_LEVEL_SCORE + POTION_RANK_TIER_SCORE * rank_tier
     score_increase(potion_score_value * multiplier)
 
+func order_fulfilled():
     # Score bonus points for fulfilling order, 
     #  increased according to difficulty level
     var order_score_value: float = ORDER_SCORE_TIERS[rank_tier]

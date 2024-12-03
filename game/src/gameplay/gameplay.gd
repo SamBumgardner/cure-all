@@ -12,6 +12,8 @@ var held_ingredient_type: Ingredient.TYPES:
         held_ingredient_type = new_value
         held_ingredient.texture = load(Ingredient.INGREDIENT_ICON_FORMAT % Ingredient.INGREDIENT_NAMES[held_ingredient_type])
 
+var score_helper: ScoreHelper = ScoreHelper.new()
+
 var cauldron_anchors: Array[Node]
 var current_player_cauldron_i: int:
     set(new_value):
@@ -19,6 +21,9 @@ var current_player_cauldron_i: int:
         player.global_position = cauldron_anchors[current_player_cauldron_i].global_position
 
 func _ready() -> void:
+    add_child(score_helper)
+    score_helper.score_increased.connect(hud.update_score)
+
     for i in cauldrons.size():
         cauldrons[i].potion_produced.connect(_on_cauldron_potion_produced.bind(i))
 
@@ -59,6 +64,8 @@ func _on_cauldron_potion_produced(
     cauldron_index: int
 ):
     print_debug("we made a potion with level %s and types %s!" % [potion.level, potion.types])
+    score_helper.potion_completed(potion)
+
     var queued_potion = queue_helper.get_front_potion()
     if queued_potion.types[0] in potion.types:
         _matched_queue_potion()
@@ -83,4 +90,4 @@ func _get_wrapped_cauldron(starting_cauldron_i: int, offset: int) -> Cauldron:
 func _matched_queue_potion():
     queue_helper.cycle_potion_queue()
     hud.update_potion_queue(queue_helper.queued_potions)
-    # score points
+    score_helper.order_fulfilled()

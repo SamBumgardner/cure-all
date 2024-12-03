@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cgnajcvst8qr7"]
+[gd_scene load_steps=8 format=3 uid="uid://cgnajcvst8qr7"]
 
 [ext_resource type="Script" path="res://src/gameplay/ui/ingredient_queue.gd" id="1_25ctl"]
 [ext_resource type="Texture2D" uid="uid://cf3dlx7olnpnr" path="res://icon.svg" id="1_b5dn5"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c6vvyjohdo563" path="res://assets/art/diamond_icon.png" id="2_2asxs"]
 [ext_resource type="Script" path="res://src/gameplay/ui/potion_queue.gd" id="4_mmc77"]
 [ext_resource type="Texture2D" uid="uid://cbhcu253y6kif" path="res://assets/art/moon_potion.png" id="5_gpgc3"]
+[ext_resource type="Script" path="res://src/gameplay/ui/score_container.gd" id="6_8kype"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -178,6 +179,7 @@ anchor_right = 1.0
 offset_top = 10.0
 offset_right = -10.0
 grow_horizontal = 0
+script = ExtResource("6_8kype")
 
 [node name="ScoreLabel" type="Label" parent="ScoreContainer"]
 layout_mode = 2
