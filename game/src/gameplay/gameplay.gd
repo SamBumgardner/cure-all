@@ -72,11 +72,27 @@ func _on_cauldron_potion_produced(
 
     var left_cauldron = _get_wrapped_cauldron(cauldron_index, -1)
     for ingredient in splash_left:
-        left_cauldron.add_ingredient(ingredient, false)
+        var launched_ingredient = LaunchedIngredient.new()
+        add_child(launched_ingredient)
+        launched_ingredient.launch(
+            ingredient,
+            cauldrons[cauldron_index].global_position,
+            left_cauldron.global_position,
+            2.0,
+            left_cauldron.add_ingredient.bind(ingredient, false)
+        )
     
     var right_cauldron = _get_wrapped_cauldron(cauldron_index, 1)
     for ingredient in splash_right:
-        right_cauldron.add_ingredient(ingredient, true)
+        var launched_ingredient = LaunchedIngredient.new()
+        add_child(launched_ingredient)
+        launched_ingredient.launch(
+            ingredient,
+            cauldrons[cauldron_index].global_position,
+            right_cauldron.global_position,
+            2.0,
+            right_cauldron.add_ingredient.bind(ingredient, false)
+        )
 
 func _get_wrapped_cauldron(starting_cauldron_i: int, offset: int) -> Cauldron:
     var new_cauldron_i: int = starting_cauldron_i + offset
