@@ -59,8 +59,8 @@ func take_next_ingredient():
 
 func _on_cauldron_potion_produced(
     potion: Potion,
-    splash_left: Array[Ingredient.TYPES],
-    splash_right: Array[Ingredient.TYPES],
+    splash_left: Array[SplashInfo],
+    splash_right: Array[SplashInfo],
     cauldron_index: int
 ):
     print_debug("we made a potion with level %s and types %s!" % [potion.level, potion.types])
@@ -71,30 +71,37 @@ func _on_cauldron_potion_produced(
         _matched_queue_potion()
 
     const launch_duration = 1.5
+    const launch_delay_increment = .25
 
+    var launch_delay = 0
     var left_cauldron = _get_wrapped_cauldron(cauldron_index, -1)
-    for ingredient in splash_left:
+    for splash_info in splash_left:
         var launched_ingredient = LaunchedIngredient.new()
         add_child(launched_ingredient)
         launched_ingredient.launch(
-            ingredient,
-            cauldrons[cauldron_index].global_position,
-            left_cauldron.global_position,
+            splash_info.type,
+            splash_info.start_position,
+            left_cauldron.global_position + left_cauldron.size * 3 / 4,
             launch_duration,
-            left_cauldron.add_ingredient.bind(ingredient, false)
+            left_cauldron.add_ingredient.bind(splash_info.type, false),
+            launch_delay
         )
+        launch_delay += launch_delay_increment
     
+    launch_delay = 0
     var right_cauldron = _get_wrapped_cauldron(cauldron_index, 1)
-    for ingredient in splash_right:
+    for splash_info in splash_right:
         var launched_ingredient = LaunchedIngredient.new()
         add_child(launched_ingredient)
         launched_ingredient.launch(
-            ingredient,
-            cauldrons[cauldron_index].global_position,
-            right_cauldron.global_position,
+            splash_info.type,
+            splash_info.start_position,
+            right_cauldron.global_position + right_cauldron.size * 1 / 4,
             launch_duration,
-            right_cauldron.add_ingredient.bind(ingredient, false)
+            right_cauldron.add_ingredient.bind(splash_info.type, true),
+            launch_delay
         )
+        launch_delay += launch_delay_increment
 
 func _get_wrapped_cauldron(starting_cauldron_i: int, offset: int) -> Cauldron:
     var new_cauldron_i: int = starting_cauldron_i + offset

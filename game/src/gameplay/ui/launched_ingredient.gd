@@ -9,7 +9,7 @@ func _ready() -> void:
     modulate = Color.TRANSPARENT
 
 func launch(ingredient_type: Ingredient.TYPES, start_position: Vector2, end_position: Vector2,
-        duration: float, callback: Callable):
+        duration: float, callback: Callable, delay: float = 0.0):
     if position_tween != null and position_tween.is_valid():
         position_tween.kill()
         visual_tween.kill()
@@ -20,9 +20,11 @@ func launch(ingredient_type: Ingredient.TYPES, start_position: Vector2, end_posi
     global_position = start_position
 
     position_tween = create_tween()
+    position_tween.tween_interval(delay)
     position_tween.tween_method(jump_tween.bind(start_position, end_position), 0.0, 1.0, duration)
 
     visual_tween = create_tween()
+    visual_tween.tween_interval(delay)
     visual_tween.tween_property(self, "rotation_degrees", rotation_degrees + 90, duration)
     visual_tween.set_ease(Tween.EASE_IN)
     visual_tween.set_trans(Tween.TRANS_CUBIC)

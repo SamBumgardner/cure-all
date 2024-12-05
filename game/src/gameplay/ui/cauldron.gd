@@ -2,8 +2,8 @@ class_name Cauldron extends Control
 
 signal potion_produced(
     potion: Potion,
-    splash_left: Array[Ingredient.TYPES],
-    splash_right: Array[Ingredient.TYPES]
+    splash_left: Array[SplashInfo],
+    splash_right: Array[SplashInfo]
 )
 
 const MAX_INGREDIENTS: int = 4
@@ -17,6 +17,10 @@ var ingredient_types: Array[int] = EMPTY_CAULDRON.duplicate()
 var held_count: int:
     get():
         return ingredient_types.filter(func(x): return x != -1).size()
+
+var splash_landing_position: Vector2:
+    get():
+        return global_position + Vector2(size.x / 2, 0)
 
 func _ready() -> void:
     ingredient_displays.map(func(x): x.modulate = Color.TRANSPARENT)
@@ -63,16 +67,18 @@ func full_brew() -> void:
         if matching_ingredient_count == MIN_MATCH:
             potion.types.push_back(ingredient_types[i])
     
-    var splash_left: Array[Ingredient.TYPES] = []
-    var splash_right: Array[Ingredient.TYPES] = []
+    var splash_left: Array[SplashInfo] = []
+    var splash_right: Array[SplashInfo] = []
     for i in ingredient_counts.size():
         if ingredient_counts[i].size() < MIN_MATCH:
             for index in ingredient_counts[i]:
+                var splashing_display = ingredient_displays[index]
+                var splash_info = SplashInfo.new(i, splashing_display.global_position + splashing_display.size / 2)
                 if index % 2 == 0:
-                    splash_left.push_back(i)
+                    splash_left.push_back(splash_info)
                 else:
-                    splash_right.push_back(i)
-        
+                    splash_right.push_back(splash_info)
+    
     empty_cauldron()
     potion_produced.emit(potion, splash_left, splash_right)
 
