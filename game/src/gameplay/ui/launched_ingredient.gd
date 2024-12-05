@@ -1,6 +1,6 @@
 class_name LaunchedIngredient extends Sprite2D
 
-const LAUNCH_HEIGHT: Vector2 = Vector2(0, -100)
+const LAUNCH_HEIGHT: float = 100
 
 var position_tween: Tween
 var visual_tween: Tween
@@ -19,16 +19,19 @@ func launch(ingredient_type: Ingredient.TYPES, start_position: Vector2, end_posi
     modulate = Color.WHITE
     global_position = start_position
 
-    var midway_position: Vector2 = (start_position + end_position) / 2 + LAUNCH_HEIGHT
     position_tween = create_tween()
-    position_tween.set_trans(Tween.TRANS_CUBIC)
-    position_tween.set_ease(Tween.EASE_OUT)
-    position_tween.tween_property(self, "global_position", midway_position, duration / 2)
-    position_tween.set_ease(Tween.EASE_IN)
-    position_tween.tween_property(self, "global_position", end_position, duration / 2)
+    position_tween.tween_method(jump_tween.bind(start_position, end_position), 0.0, 1.0, duration)
 
     visual_tween = create_tween()
-    visual_tween.tween_property(self, "modulate", Color.TRANSPARENT, duration)
-    visual_tween.parallel().tween_property(self, "rotation_degrees", rotation_degrees + 90, duration)
+    visual_tween.tween_property(self, "rotation_degrees", rotation_degrees + 90, duration)
+    visual_tween.set_ease(Tween.EASE_IN)
+    visual_tween.set_trans(Tween.TRANS_CUBIC)
+    visual_tween.parallel().tween_property(self, "modulate", Color.TRANSPARENT, duration)
 
     visual_tween.tween_callback(callback)
+
+func jump_tween(progress: float, start_position: Vector2, end_position: Vector2):
+    var new_x = start_position.x * (1 - progress) + end_position.x * progress
+    var new_y = (progress - .5) ** 2 * (LAUNCH_HEIGHT * 4) + (start_position.y - LAUNCH_HEIGHT)
+    global_position.x = new_x
+    global_position.y = new_y

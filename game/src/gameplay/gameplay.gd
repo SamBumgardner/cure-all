@@ -70,6 +70,8 @@ func _on_cauldron_potion_produced(
     if queued_potion.types[0] in potion.types:
         _matched_queue_potion()
 
+    const launch_duration = 1.5
+
     var left_cauldron = _get_wrapped_cauldron(cauldron_index, -1)
     for ingredient in splash_left:
         var launched_ingredient = LaunchedIngredient.new()
@@ -78,7 +80,7 @@ func _on_cauldron_potion_produced(
             ingredient,
             cauldrons[cauldron_index].global_position,
             left_cauldron.global_position,
-            2.0,
+            launch_duration,
             left_cauldron.add_ingredient.bind(ingredient, false)
         )
     
@@ -90,7 +92,7 @@ func _on_cauldron_potion_produced(
             ingredient,
             cauldrons[cauldron_index].global_position,
             right_cauldron.global_position,
-            2.0,
+            launch_duration,
             right_cauldron.add_ingredient.bind(ingredient, false)
         )
 
